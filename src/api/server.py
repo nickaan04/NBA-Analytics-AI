@@ -24,6 +24,7 @@ def post_parlay(request: PostParlayRequest):
     "parlayLegProbabilities": [
         {
             "player": "Stephen Curry",
+            "opponent": "HOU",
             "prop": "pts",
             "value": 25.5,
             "overUnder": "over",
