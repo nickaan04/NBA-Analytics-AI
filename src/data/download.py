@@ -117,6 +117,6 @@ def download_roster_data(team: str):
             with open(f"./src/data/csv/players/{player.lower().replace(' ','')}.csv", "w+") as f:
                 f.write(player_data)
         time.sleep(6)  # Rate limiting to be respectful to the server
-download_rosters(["IND"])
-
+download_rosters(["DAL"])
+download_roster_data("LAL")
 
