@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Literal
 
 # TODO gather all player names from our team rosters, populate list
-players = ["Stephen Curry"]
+players = ["Jalen Brunson"]
 
 Player = Enum('Player', {name.replace(' ', '_'): name for name in players}, type=str)
 
