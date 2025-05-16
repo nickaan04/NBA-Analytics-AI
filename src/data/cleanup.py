@@ -16,20 +16,21 @@ csv_files = [
 
 # Values that indicate the player did not play
 EXCLUDE_VALUES = {"Did Not Play", "Inactive", "Did Not Dress", "", None}
+KEEP_COLS = [
+    "ranker", "player_game_num_career", "date",
+    "pts", "blk", "orb", "drb", "ast", "stl", "tov", "fg3", "fg", "ft"]
 
-def clean_csv(file_path):
+
+def clean_and_filter(file_path):
     try:
         df = pd.read_csv(file_path)
-
         if 'is_starter' in df.columns:
-            df_clean = df[~df['is_starter'].astype(str).str.strip().isin(EXCLUDE_VALUES)]
-            df_clean.to_csv(file_path, index=False)
-            print(f"Cleaned: {file_path}")
-        else:
-            print(f" Skipped (no 'is_starter' column): {file_path}")
+            df = df[~df['is_starter'].astype(str).isin(EXCLUDE_VALUES)]
+        df = df[KEEP_COLS]
+        df.to_csv(file_path, index=False)
+        print(f"Cleaned & filtered: {file_path}")
     except Exception as e:
         print(f"Error processing {file_path}: {e}")
 
-# Run the cleaner for each file
 for file in csv_files:
-    clean_csv(file)
+    clean_and_filter(file)
