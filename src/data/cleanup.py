@@ -2,16 +2,16 @@ import pandas as pd
 
 # List of your 7 CSV files (adjust filenames and paths as needed)
 csv_files = [
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-2021.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-2022.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-2023.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-2024.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-2025.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-playoffs-2021.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-playoffs-2022.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-playoffs-2023.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-playoffs-2024.csv",
-    "/Users/Ryan/Documents/CSC480/CSC-480/NBA-Analytics-AI/src/data/csv/players/brunsja01-playoffs-2025.csv",
+    "./src/data/csv/players/brunsja01-2021.csv",
+    "./src/data/csv/players/brunsja01-2022.csv",
+    "./src/data/csv/players/brunsja01-2023.csv",
+    "./src/data/csv/players/brunsja01-2024.csv",
+    "./src/data/csv/players/brunsja01-2025.csv",
+    "./src/data/csv/players/brunsja01-playoffs-2021.csv",
+    "./src/data/csv/players/brunsja01-playoffs-2022.csv",
+    "./src/data/csv/players/brunsja01-playoffs-2023.csv",
+    "./src/data/csv/players/brunsja01-playoffs-2024.csv",
+    "./src/data/csv/players/brunsja01-playoffs-2025.csv",
 ]
 
 # Values that indicate the player did not play
