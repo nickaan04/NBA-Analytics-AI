@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-teams = ["MIN", "NYK", "IND", "DEN"]
+teams = ["OKC", "MIN", "NYK", "IND"]
 seasons = [2021, 2022, 2023, 2024, 2025]
 
 EXCEPTIONS: Dict[str, str] = {
@@ -15,18 +15,15 @@ EXCEPTIONS: Dict[str, str] = {
     "Jaylen Clark": "clarkja02",
     "Terrence Shannon Jr.": "shannte01",
     # New York
-    "Anton Watson": "watsoan02",
-    "Kevin McCullar Jr.": "mcculke01",
     "P.J. Tucker": "tuckepj01",
     # Indiana
     "T.J. McConnell": "mccontj01",
     "Jarace Walker": "walkeja02",
-    # Denver
-    "Michael Porter Jr.": "portemi01",
-    "Jalen Pickett": "pickeja02",
-    "Dario Šarić": "saricda01",
-    "Nikola Jokić": "jokicni01",
-    "Vlatko Čančar": "cancavl01",
+    # Oklahoma City
+    "Jalen Williams": "willija06",
+    "Kenrich Williams": "willike04",
+    "Jaylin Williams": "willija07",
+    "Nikola Topić": "topicni01",
 }
 
 def generate_player_id(name: str) -> str:
@@ -68,25 +65,43 @@ def get_player_ids_from_rosters(teams: List[str], roster_dir: str = "./src/data/
     
     return player_ids
 
-def download_rosters(teams: List[str]):
+def download_rosters(teams: List[str], output_dir: str = "./src/data/csv/rosters"):
     """
-    Download roster CSVs for each team if not already present.
+    Download roster CSVs for each team if not already present,
+    excluding two-way players marked with '(TW)' in the roster listing.
     """
-    os.makedirs("./src/data/csv/rosters", exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
+
     for team in teams:
-        out_path = f"./src/data/csv/rosters/roster_{team}.csv"
+        out_path = os.path.join(output_dir, f"roster_{team}.csv")
         if os.path.exists(out_path):
+            print(f"Roster for {team} already exists, skipping.")
             continue
+
         try:
             url = f"https://www.basketball-reference.com/teams/{team}/2025.html"
             resp = requests.get(url)
             resp.raise_for_status()
             soup = BeautifulSoup(resp.content, 'html5lib')
             table = soup.find('table', id='roster')
-            players = [td.a.text for tr in table.find_all('tr')[1:] if (td := tr.find('td', {'data-stat': 'player'})) and td.a]
+            players = []
+
+            for row in table.find('tbody').find_all('tr'):
+                # Find the player cell
+                name_cell = row.find('td', {'data-stat': 'player'})
+                if not name_cell or not name_cell.a:
+                    continue
+                # Exclude two-way players marked by "(TW)"
+                if '(TW)' in name_cell.get_text():
+                    continue
+                # Append only the player's name (anchor text)
+                players.append(name_cell.a.text.strip())
+
+            # Save to CSV
             pd.DataFrame({'Player': players}).to_csv(out_path, index=False)
-            print(f"Downloaded roster for {team}")
-            time.sleep(6)
+            print(f"Downloaded roster for {team}: {len(players)} players (excluding two-way).")
+            time.sleep(6)  # Rate limiting
+
         except Exception as e:
             print(f"Error downloading roster for {team}: {e}")
 
