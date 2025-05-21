@@ -44,5 +44,13 @@ def combine_and_save(file_list, output_path):
     print(f"Saved combined file: {output_path}")
 
 # Combine regular season and playoff files
-combine_and_save(regular_season_files, "./src/data/csv/players/brunson_regular.csv")
-combine_and_save(playoff_files, "./src/data/csv/players/brunson_playoffs.csv")
+combine_and_save(regular_season_files, "./src/data/csv/players/brunsja01-regular.csv")
+combine_and_save(playoff_files, "./src/data/csv/players/brunsja01-playoffs.csv")
+
+
+def combine_all_player_logs():
+
+    """
+    open rosters, iterate through them, generate_player_id, combine_and_save
+    """
+    pass

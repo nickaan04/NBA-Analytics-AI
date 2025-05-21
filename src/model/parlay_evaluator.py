@@ -23,6 +23,7 @@ class ParlayEvaluator:
         
         # initialize predictor with quantile regression levels 
         predictor = TabularPredictor(
+            path=f"model/{player_id}/{prop}/",
             label=label,
             problem_type='quantile', 
             quantile_levels=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
@@ -37,3 +38,8 @@ class ParlayEvaluator:
         
         # Save model
         self.model_registry.save_model(predictor, player_id, prop)
+
+    def predict(self, player_id: str, prop: PropStat, row: pd.DataFrame):
+        predictor = TabularPredictor()
+
+        predictor.predict
