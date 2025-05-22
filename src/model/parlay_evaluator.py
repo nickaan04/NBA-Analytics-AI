@@ -40,6 +40,6 @@ class ParlayEvaluator:
         self.model_registry.save_model(predictor, player_id, prop)
 
     def predict(self, player_id: str, prop: PropStat, row: pd.DataFrame):
-        predictor = TabularPredictor()
+        predictor = TabularPredictor.load(f"./model/{player_id}/{prop}")
 
-        predictor.predict
+        return predictor.predict(row)
