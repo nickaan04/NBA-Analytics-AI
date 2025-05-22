@@ -18,3 +18,10 @@ evaluator.train_player_prop_model(BRUNSON_ID, "pts", brunson_dataset.get_season(
 # predictor = TabularPredictor.load("/Users/star/Library/CSC/CSC480/NBA-Analytics-AI/AutogluonModels/ag-20250516_234048")
 # print("leaderboard", predictor.leaderboard())
 # print(predictor.predict(brunson_dataset.get_playoffs(2024)))
+
+# print(brunson_dataset.get_playoffs(2024).info())
+
+evaluator.train_player_prop_model(BRUNSON_ID, "pts", brunson_dataset.get_regular())
+
+predictionRow = brunson_dataset.get_playoffs_avg(10)
+print(predictionRow)
