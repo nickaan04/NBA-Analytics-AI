@@ -6,24 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-teams = ["OKC", "MIN", "NYK", "IND"]
-seasons = [2021, 2022, 2023, 2024, 2025]
-
 EXCEPTIONS: Dict[str, str] = {
-    # Minnesota
-    "Jaden McDaniels": "mcdanja02",
-    "Jaylen Clark": "clarkja02",
-    "Terrence Shannon Jr.": "shannte01",
-    # New York
-    "P.J. Tucker": "tuckepj01",
-    # Indiana
-    "T.J. McConnell": "mccontj01",
-    "Jarace Walker": "walkeja02",
-    # Oklahoma City
     "Jalen Williams": "willija06",
-    "Kenrich Williams": "willike04",
-    "Jaylin Williams": "willija07",
-    "Nikola Topić": "topicni01",
 }
 
 def generate_player_id(name: str) -> str:
@@ -119,7 +103,7 @@ def parse_table(table) -> pd.DataFrame:
             rows.append(row)
     return pd.DataFrame(rows, columns=headers)
 
-def get_player_data(player: str, year: int, output_dir: str = "./src/data/csv/players"):
+def get_player_data(player: str, year: int, player_ids: Dict[str, str], output_dir: str = "./src/data/csv/players"):
     """
     Download and save regular-season and playoff game logs for a given player and year.
     """
@@ -143,11 +127,3 @@ def get_player_data(player: str, year: int, output_dir: str = "./src/data/csv/pl
                 print(f"No table found for {fname}")
     except Exception as e:
         print(f"Failed to download data for {player} {year}: {e}")
-
-download_rosters(teams) #download rosters for all teams
-player_ids = get_player_ids_from_rosters(teams) #generate unique player IDs from rosters
-print("Generated player IDs:", player_ids)
-for player in player_ids:
-    for season in seasons:
-        get_player_data(player, season)
-        time.sleep(6)
