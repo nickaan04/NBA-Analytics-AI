@@ -1,56 +1,84 @@
-import pandas as pd
 import os
+import glob
+import pandas as pd
 
-# Define file paths
-regular_season_files = [
-    "./src/data/csv/players/brunsja01-2021.csv",
-    "./src/data/csv/players/brunsja01-2022.csv",
-    "./src/data/csv/players/brunsja01-2023.csv",
-    "./src/data/csv/players/brunsja01-2024.csv",
-    "./src/data/csv/players/brunsja01-2025.csv"
-]
-
-playoff_files = [
-    "./src/data/csv/players/brunsja01-playoffs-2021.csv",
-    "./src/data/csv/players/brunsja01-playoffs-2022.csv",
-    "./src/data/csv/players/brunsja01-playoffs-2023.csv",
-    "./src/data/csv/players/brunsja01-playoffs-2024.csv",
-    "./src/data/csv/players/brunsja01-playoffs-2025.csv"
-]
+TEAMS = ["OKC", "IND"]
 
 # Values that indicate the player did not play
 EXCLUDE_VALUES = {"Did Not Play", "Inactive", "Did Not Dress", "", None}
 
-# Columns to keep
+# Columns to keep in the final, cleaned CSV
 KEEP_COLS = [
-    "ranker", "player_game_num_career", "date",
-    "pts", "blk", "orb", "drb", "ast", "stl", "tov", "fg3", "fg", "ft"
+    "player_game_num_career",
+    "date",
+    "pts",
+    "blk",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "tov",
+    "fg3",
+    "fg",
+    "ft"
 ]
 
-def clean_csv(file_path):
-    try:
-        df = pd.read_csv(file_path)
-        if 'is_starter' in df.columns:
-            df = df[~df['is_starter'].astype(str).isin(EXCLUDE_VALUES)]
-        return df[KEEP_COLS]
-    except Exception as e:
-        print(f"Failed to process {file_path}: {e}")
-        return pd.DataFrame(columns=KEEP_COLS)
-
-# Combine and save
-def combine_and_save(file_list, output_path):
-    combined_df = pd.concat([clean_csv(file) for file in file_list], ignore_index=True)
-    combined_df.to_csv(output_path, index=False)
-    print(f"Saved combined file: {output_path}")
-
-# Combine regular season and playoff files
-combine_and_save(regular_season_files, "./src/data/csv/players/brunsja01-regular.csv")
-combine_and_save(playoff_files, "./src/data/csv/players/brunsja01-playoffs.csv")
-
-
-def combine_all_player_logs():
-
+def clean_df(df: pd.DataFrame) -> pd.DataFrame:
     """
-    open rosters, iterate through them, generate_player_id, combine_and_save
+    - Remove rows where 'reason' indicates no play.
+    - Replace empty strings with NaN.
+    - Drop any rows where ALL stat columns are NaN.
+    - Keep only KEEP_COLS.
+    - Parse and sort by date.
     """
-    pass
+    # 1) Exclude DNP/Inactives if 'reason' exists
+    if 'reason' in df.columns:
+        df = df[~df['reason'].isin(EXCLUDE_VALUES)]
+
+    # 2) Normalize blanks to actual NaN
+    df = df.replace({"": pd.NA, None: pd.NA})
+
+    # 3) Drop rows where all stat columns are missing
+    stat_cols = [c for c in KEEP_COLS if c not in ("ranker", "player_game_num_career", "date")]
+    df = df.dropna(subset=stat_cols, how='all')
+
+    # 4) Keep only the desired columns
+    df = df[KEEP_COLS].copy()
+
+    # 5) Parse 'date' and sort ascending
+    df['date'] = pd.to_datetime(df['date'])
+    df = df.sort_values('date').reset_index(drop=True)
+
+    return df
+
+def combine_and_clean_player(pid: str, player_dir: str = "./src/data/csv/players"):
+    """
+    - Globs per-year CSVs for <pid>-YYYY.csv and <pid>-playoffs-YYYY.csv
+    - Concatenates, cleans, and sorts them via clean_df()
+    - Writes out <pid>-regular.csv and <pid>-playoffs.csv
+    - Deletes the original per-year files
+    """
+    patterns = {
+        f"{pid}-regular.csv":  os.path.join(player_dir, f"{pid}-[0-9][0-9][0-9][0-9].csv"),
+        f"{pid}-playoffs.csv": os.path.join(player_dir, f"{pid}-playoffs-[0-9][0-9][0-9][0-9].csv"),
+    }
+
+    for out_name, pattern in patterns.items():
+        files = glob.glob(pattern)
+        if not files:
+            continue
+
+        # Read & concat all per-year files
+        df = pd.concat((pd.read_csv(f) for f in files), ignore_index=True)
+        # Clean and sort
+        df_clean = clean_df(df)
+
+        # Save comprehensive file
+        out_path = os.path.join(player_dir, out_name)
+        df_clean.to_csv(out_path, index=False)
+        print(f"Created cleaned {out_name} ({len(df_clean)} rows)")
+
+        # Remove originals
+        for f in files:
+            os.remove(f)
+            print(f"  deleted {os.path.basename(f)}")
