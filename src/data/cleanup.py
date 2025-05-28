@@ -6,6 +6,8 @@ TEAMS = ["OKC", "IND"]
 
 # Values that indicate the player did not play
 EXCLUDE_VALUES = {"Did Not Play", "Inactive", "Did Not Dress", "", None}
+REG_PATTERN = "{pid}-regular.csv"
+PLAYOFF_PATTERN = "{pid}-playoffs.csv"
 
 # Columns to keep in the final, cleaned CSV
 KEEP_COLS = [
@@ -82,3 +84,47 @@ def combine_and_clean_player(pid: str, player_dir: str = "./src/data/csv/players
         for f in files:
             os.remove(f)
             print(f"  deleted {os.path.basename(f)}")
+
+def merge_player_csvs(pid: str, player_dir: str = "./src/data/csv/players") -> None:
+    """
+    Merge regular-season and playoff CSVs for a given player into a single
+    comprehensive CSV with an 'is_playoff' flag, sorted by date (earliest first).
+
+    Args:
+        pid: Player identifier (e.g., 'brunsja01').
+        player_dir: Directory where per-year CSVs are stored.
+    """
+    # Build file patterns
+    reg_pattern = os.path.join(player_dir, REG_PATTERN.format(pid=pid))
+    playoff_pattern = os.path.join(player_dir, PLAYOFF_PATTERN.format(pid=pid))
+
+    # Collect DataFrames
+    dfs = []
+    # Regular-season files
+    for filepath in glob.glob(reg_pattern):
+        df = pd.read_csv(filepath)
+        df['is_playoff'] = False
+        dfs.append(df)
+    # Playoff files
+    for filepath in glob.glob(playoff_pattern):
+        df = pd.read_csv(filepath)
+        df['is_playoff'] = True
+        dfs.append(df)
+
+    if not dfs:
+        print(f"No files found for player {pid}")
+        return
+
+    # Concatenate and sort
+    merged = pd.concat(dfs, ignore_index=True)
+    # Ensure 'date' is datetime and sort ascending
+    if 'date' in merged.columns:
+        merged['date'] = pd.to_datetime(merged['date'], errors='coerce')
+        merged = merged.sort_values('date').reset_index(drop=True)
+    else:
+        print("Warning: 'date' column not found; skipping sort.")
+
+    # Output path
+    out_file = os.path.join(player_dir, f"{pid}-combined.csv")
+    merged.to_csv(out_file, index=False)
+    print(f"Merged CSV saved to {out_file}")
