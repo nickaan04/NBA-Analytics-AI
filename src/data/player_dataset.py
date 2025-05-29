@@ -7,16 +7,17 @@ Creates a dictionary of dataframes for each year's regular / postseason
 """
 class PlayerDataset:
     def __init__(self, player_id):
+        # self.regular = pd.read_csv(f"./src/data/csv/players/{player_id}-regular.csv")
+        # self.playoffs = pd.read_csv(f"./src/data/csv/players/{player_id}-playoffs.csv")
         self.combined = pd.read_csv(f"./src/data/csv/players/{player_id}-combined.csv")
-        
 
-    def get_stats(self):
-        """
-        Get all stats for the player
-        
-        Returns:
-            DataFrame: All stats for the player
-        """
+    # def get_regular(self):
+    #     return self.regular
+
+    # def get_playoffs(self):
+    #     return self.playoffs
+    
+    def get_all(self):
         return self.combined
 
 

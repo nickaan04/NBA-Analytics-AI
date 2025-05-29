@@ -32,6 +32,7 @@ class ParlayEvaluator:
         # Train model
         predictor.fit(
             train_data=historical_data,
+            sample_weight=historical_data["is_playoff"].map({True:1.5,False:1.0}),
             presets='best_quality',
             time_limit=300 # 5 min
         )
