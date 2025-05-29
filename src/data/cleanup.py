@@ -128,3 +128,26 @@ def merge_player_csvs(pid: str, player_dir: str = "./src/data/csv/players") -> N
     out_file = os.path.join(player_dir, f"{pid}-combined.csv")
     merged.to_csv(out_file, index=False)
     print(f"Merged CSV saved to {out_file}")
+
+def update_rebound_column_in_combined_csvs(player_dir: str = "./src/data/csv/players") -> None:
+    """
+    Update existing combined CSVs by merging 'orb' and 'drb' into 'reb', dropping
+    the original columns, and re-saving the files.
+
+    Args:
+        player_dir: Directory where combined CSVs are stored.
+    """
+    pattern = os.path.join(player_dir, "*-combined.csv")
+    for filepath in glob.glob(pattern):
+        try:
+            df = pd.read_csv(filepath)
+            # If orb and drb present, combine and drop
+            if 'orb' in df.columns and 'drb' in df.columns:
+                df['reb'] = df['orb'].fillna(0) + df['drb'].fillna(0)
+                df.drop(columns=['orb', 'drb'], inplace=True)
+                df.to_csv(filepath, index=False)
+                print(f"Updated rebounds in {os.path.basename(filepath)}")
+            else:
+                print(f"No orb/drb columns in {os.path.basename(filepath)}, skipping.")
+        except Exception as e:
+            print(f"Failed to update {os.path.basename(filepath)}: {e}")
