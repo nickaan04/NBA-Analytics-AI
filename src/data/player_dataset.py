@@ -7,20 +7,23 @@ Creates a dictionary of dataframes for each year's regular / postseason
 """
 class PlayerDataset:
     def __init__(self, player_id):
-        self.regular = pd.read_csv(f"./src/data/csv/players/{player_id}-regular.csv")
-        self.playoffs = pd.read_csv(f"./src/data/csv/players/{player_id}-playoffs.csv")
+        self.combined = pd.read_csv(f"./src/data/csv/players/{player_id}-combined.csv")
+        
 
-    def get_regular(self):
-        return self.regular
-
-    def get_playoffs(self):
-        return self.playoffs
+    def get_stats(self):
+        """
+        Get all stats for the player
+        
+        Returns:
+            DataFrame: All stats for the player
+        """
+        return self.combined
 
 
     # def get_playoffs_avg(self, n):
     #     """
     #     Get average of n most recent playoffs game stats
-        
+    #
     #     Args:
     #         year: season
     #         n: numGames
@@ -36,7 +39,7 @@ class PlayerDataset:
         Args:
             n: Number of most recent playoff games to average
         """
-        df = self.playoffs.iloc[-n:]
+        df = self.combined.iloc[-n:]
 
         # Extract numeric average from columns 3 onward (skip 'date')
         stats_avg = df.drop(columns=["date"]).iloc[:, 2:].mean().to_frame().T
