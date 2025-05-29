@@ -26,13 +26,13 @@ class ParlayEvaluator:
             path=f"model/{player_id}/{prop}/",
             label=label,
             problem_type='quantile', 
-            quantile_levels=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+            quantile_levels=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+            sample_weight="is_playoff"
         )
         
         # Train model
         predictor.fit(
             train_data=historical_data,
-            sample_weight=historical_data["is_playoff"].map({True:1.5,False:1.0}),
             presets='best_quality',
             time_limit=300 # 5 min
         )
