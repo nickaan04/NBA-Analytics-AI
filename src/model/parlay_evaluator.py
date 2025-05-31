@@ -12,7 +12,7 @@ from api.model import ParlayLeg
 from api.model import ParlayLegProbability
 from api.model import PropStat
 
-QUANTILE_LEVELS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+QUANTILE_LEVELS = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]
 
 class ParlayEvaluator:
     def __init__(self):
