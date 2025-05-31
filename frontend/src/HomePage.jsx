@@ -118,7 +118,7 @@ function HomePage() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <button type="submit" style={{ padding: '0.75rem 1.5rem' }}>Evaluate Parlay</button>
+          <button type="submit" style={{ padding: '0.75rem 1.5rem' }}>EVALUATE</button>
         </div>
       </form>
     </div>

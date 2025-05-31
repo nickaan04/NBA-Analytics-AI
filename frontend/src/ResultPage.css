@@ -1,0 +1,114 @@
+/* src/ResultPage.css */
+.result-page-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: sans-serif;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+  
+  /* Overall probability area */
+  .overall-prob-container {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .overall-prob-value {
+    display: block;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #34495e;
+  }
+  
+  .overall-prob-label {
+    display: block;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }
+  
+  /* Container for the individual leg cards */
+  .legs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  /* Each leg card */
+  .leg-card {
+    background: #ecf0f1;
+    border-radius: 8px;
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .player-info {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .player-image {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 1rem;
+    border: 2px solid #bdc3c7;
+  }
+  
+  .player-details {
+    flex: 1;
+  }
+  
+  .player-name {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #2c3e50;
+  }
+  
+  .prop-detail {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    color: #7f8c8d;
+  }
+  
+  /* Probability badge at the bottom of each card */
+  .leg-probability {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    padding: 0.75rem 0;
+  }
+  
+  /* New Parlay button at the bottom */
+  .new-parlay-container {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .new-parlay-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .new-parlay-button:hover {
+    background-color: #2980b9;
+  }
+  
