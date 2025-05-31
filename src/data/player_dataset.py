@@ -26,6 +26,39 @@ class PlayerDataset:
             DataFrame: All stats for the player
         """
         return self.combined
+    
+    def get_career_averages(self):
+        """
+        Compute the average of each prop (“pts”, “reb”, etc.) for all games
+        Returns a dict { "pts": float, "reb": float, … }.
+        """
+        #compute mean of each column
+        averages = {}
+        for prop in ["pts", "reb", "ast", "stl", "blk", "tov", "fg3", "fg", "ft"]:
+            if prop in self.combined.columns:
+                averages[prop] = round(self.combined[prop].mean(), 2)
+            else:
+                averages[prop] = 0.0
+        return averages
+    
+    def get_recent_averages(self, num_games=5):
+        """
+        Take the last num_games (by date) in the combined CSV and average them.
+        Returns a dict { "pts": float, "reb": float, … }.
+        """
+        # Sort by date descending
+        df_sorted = self.combined.sort_values(by="date", ascending=False)
+        df_recent = df_sorted.head(num_games)
+        if df_recent.empty:
+            return { prop: 0.0 for prop in ["pts", "reb", "ast", "stl", "blk", "tov", "fg3", "fg", "ft"] }
+
+        averages = {}
+        for prop in ["pts", "reb", "ast", "stl", "blk", "tov", "fg3", "fg", "ft"]:
+            if prop in df_recent.columns:
+                averages[prop] = round(df_recent[prop].mean(), 2)
+            else:
+                averages[prop] = 0.0
+        return averages
 
     def get_playoffs_avg(self, n):
         """

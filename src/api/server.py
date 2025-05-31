@@ -1,9 +1,10 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
-from api.model import *
+from typing import List, Dict
+from api.model import PostParlayRequest, PostParlayResponse, ParlayLegProbability
 from model.parlay_evaluator import ParlayEvaluator
 from data.download import get_player_ids_from_rosters
+from data.player_dataset import PlayerDataset
 
 class parlaiApi:
     def __init__(self, evaluator: ParlayEvaluator):
@@ -31,17 +32,40 @@ class parlaiApi:
         
         @self.router.get("/players/")
         def get_players():
-            """
-            Return a JSON object with a "players" key that is a list of
-            { "name": <playerName>, "id": <playerId> } dictionaries.
-            This allows the frontend to autocomplete on valid names and
-            know which ID to use for images.
-            """
-            player_map = get_player_ids_from_rosters(TEAMS)
-            return { "players": [
-                {"name": name, "id": pid}
-                for name, pid in player_map.items()
-            ] }
+          """
+          Return a JSON object with a "players" key that is a list of
+          { "name": <playerName>, "id": <playerId> } dictionaries.
+          This allows the frontend to autocomplete on valid names and
+          know which ID to use for images.
+          """
+          player_map = get_player_ids_from_rosters(TEAMS)
+          return { "players": [
+              {"name": name, "id": pid}
+              for name, pid in player_map.items()
+          ] }
+
+        @self.router.get("/player_stats/{player_id}")
+        def get_player_stats(player_id: str):
+          """
+          Return JSON:
+            {
+              "career": { "pts": 24.3, "reb": 5.1, ... },
+              "recent": { "pts": 26.2, "reb": 6.2, ... }
+            }
+          Career averages cover seasons 2022–2025; recent covers last 5 games.
+          """
+          try:
+              ds = PlayerDataset(player_id)
+              career = ds.get_career_averages()
+              recent = ds.get_recent_averages()
+              return {"career": career, "recent": recent}
+          except FileNotFoundError:
+              raise HTTPException(
+                  status_code=404,
+                  detail=f"No combined CSV found for player_id={player_id}"
+              )
+          except Exception as e:
+              raise HTTPException(status_code=500, detail=str(e))
 
     def start_server(self):
         app = FastAPI()
