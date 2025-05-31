@@ -19,3 +19,11 @@ pip install .
 ```sh
 fastapi dev src/api/server.py
 ```
+
+## Run the frontend
+
+```sh
+cd frontend
+npm install
+npm run dev
+```
