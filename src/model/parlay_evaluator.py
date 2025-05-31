@@ -34,7 +34,7 @@ class ParlayEvaluator:
         predictor.fit(
             train_data=historical_data,
             presets='best_quality',
-            time_limit=300 # 5 min
+            time_limit=60 # 5 min
         )
         
         # Save model
