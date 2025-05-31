@@ -19,18 +19,6 @@ class PlayerDataset:
         """
         return self.combined
 
-
-    # def get_playoffs_avg(self, n):
-    #     """
-    #     Get average of n most recent playoffs game stats
-    #
-    #     Args:
-    #         year: season
-    #         n: numGames
-    #     """
-    #     avg = self.playoffs.iloc[-n:, 2:].mean().to_frame().T # 3: ignores first 3 columns since they are non-numeric (date)
-    #     return 
-
     def get_playoffs_avg(self, n):
         """
         Get average of n most recent playoffs game stats, excluding 'date',
