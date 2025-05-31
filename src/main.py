@@ -5,12 +5,12 @@ from api.model import PropStat
 from autogluon.tabular import TabularPredictor
 
 
-BRUNSON_ID = "brunsja01"
-
-brunson_dataset = PlayerDataset(BRUNSON_ID)
+HALIBURTON_ID = "halibty01"
+haliburton_dataset = PlayerDataset(HALIBURTON_ID)
 evaluator = ParlayEvaluator()
 
-#print(brunson_dataset.get_season(2024))
+
+#print(brunson_dataset.get_season(2024))l
 # evaluator.train_player_prop_model(BRUNSON_ID, "pts", brunson_dataset.get_playoffs())
 
 # OLD
@@ -21,7 +21,10 @@ evaluator = ParlayEvaluator()
 
 # print(brunson_dataset.get_playoffs(2024).info())
 
-evaluator.train_player_prop_model(BRUNSON_ID, "pts", brunson_dataset.get_regular())
+# evaluator.train_player_prop_model(BRUNSON_ID, "pts", brunson_dataset.get_regular())
 
-predictionRow = brunson_dataset.get_playoffs_avg(10)
-print(predictionRow)
+
+# evaluator.train_player_prop_model(HALIBURTON_ID, "pts", haliburton_dataset.get_stats())
+predictionRow = haliburton_dataset.get_playoffs_avg(10)
+print(evaluator.predict(HALIBURTON_ID, "pts", predictionRow))
+# print(predictionRow)
