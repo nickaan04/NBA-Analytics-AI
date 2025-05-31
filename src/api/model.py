@@ -20,7 +20,6 @@ class PropStat(str, Enum):
 
 class ParlayLeg(BaseModel):
     player: Player
-    opponent: str
     prop: PropStat
     value: float
     overUnder: Literal["over", "under"]

@@ -7,11 +7,11 @@ import './ResultPage.css';
  * goes from red (low) to green (high).
  */
 function getProbabilityColor(prob) {
-  if (prob < 0.2) return '#e74c3c';   // red
-  if (prob < 0.4) return '#e67e22';   // orange
-  if (prob < 0.6) return '#f1c40f';   // yellow
-  if (prob < 0.8) return '#2ecc71';   // light green
-  return '#27ae60';                   // dark green
+  if (prob < 0.2) return '#e74c3c'; //red
+  if (prob < 0.4) return '#e67e22'; //orange
+  if (prob < 0.6) return '#f1c40f'; //yellow
+  if (prob < 0.8) return '#2ecc71'; //light green
+  return '#27ae60'; //dark green
 }
 
 /**
@@ -27,36 +27,25 @@ function ResultPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // Hard-coded fallback data (only used if no state was passed)
-  const fallbackData = {
-    overallProbability: 0.78,
-    parlayLegProbabilities: [
-      {
-        player: 'Jalen Brunson',
-        prop: 'pts',
-        value: 28.5,
-        overUnder: 'over',
-        probability: 0.82
-      },
-      {
-        player: 'Anthony Davis',
-        prop: 'reb',
-        value: 11.5,
-        overUnder: 'under',
-        probability: 0.43
-      },
-      {
-        player: 'Luka Doncic',
-        prop: 'ast',
-        value: 9.5,
-        overUnder: 'over',
-        probability: 0.65
-      }
-    ]
-  };
+  //if state is missing or malformed, redirect back to home
+  if (
+    !state ||
+    !state.parlayLegProbabilities ||
+    !state.playerMap ||
+    !state.overallProbability
+  ) {
+    return (
+      <div className="result-page-container">
+        <p>No results available. <button onClick={() => navigate('/')}>Go Back</button></p>
+      </div>
+    );
+  }
 
-  // If no state was passed from navigation, use fallbackData
-  const data = state ?? fallbackData;
+  const {
+    overallProbability,
+    parlayLegProbabilities,
+    playerMap  //this is { playerName: playerId, … }
+  } = state;
 
   return (
     <div className="result-page-container">
@@ -66,17 +55,21 @@ function ResultPage() {
       {/* Overall Probability */}
       <div className="overall-prob-container">
         <span className="overall-prob-value">
-          {(data.overallProbability * 100).toFixed(1)}%
+          {(overallProbability * 100).toFixed(1)}%
         </span>
         <span className="overall-prob-label">Overall Parlay Probability</span>
       </div>
 
       {/* Individual Legs */}
       <div className="legs-container">
-        {data.parlayLegProbabilities.map((leg, idx) => {
+        {parlayLegProbabilities.map((leg, idx) => {
           const prob = leg.probability;
           const bgColor = getProbabilityColor(prob);
-          const playerImageUrl = getPlayerImageUrl(leg.player);
+          //lookup the playerId so we point to /images/<playerId>.png
+          const playerId = playerMap[leg.player];
+          const playerImageUrl = playerId
+            ? `/images/${playerId}.png`
+            : `/images/placeholder.png`;
 
           return (
             <div key={idx} className="leg-card">
@@ -86,16 +79,15 @@ function ResultPage() {
                   src={playerImageUrl}
                   alt={leg.player}
                   onError={(e) => {
-                    // Fallback if image not found:
+                    // Fallback if custom image not found:
                     e.target.onerror = null;
-                    e.target.src = '/images/dortlu01.png';
+                    e.target.src = '/images/placeholder.png';
                   }}
                 />
                 <div className="player-details">
                   <h3 className="player-name">{leg.player}</h3>
                   <span className="prop-detail">
-                    {leg.prop.toUpperCase()}{' '}
-                    {leg.overUnder === 'over' ? '>' : '<'} {leg.value}
+                    {leg.prop.toUpperCase()} {leg.overUnder === 'over' ? '>' : '<'} {leg.value}
                   </span>
                 </div>
               </div>

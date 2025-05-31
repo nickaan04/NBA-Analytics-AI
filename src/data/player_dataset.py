@@ -1,13 +1,21 @@
 import pandas as pd
-
-seasons = [2021, 2022, 2023, 2024, 2025]
+import os
 
 """
 Creates a dictionary of dataframes for each year's regular / postseason
 """
 class PlayerDataset:
     def __init__(self, player_id):
-        self.combined = pd.read_csv(f"./src/data/csv/players/{player_id}-combined.csv")
+        # Determine the folder of THIS file (player_dataset.py)
+        base_folder = os.path.dirname(__file__)  
+        # Move up one level to “src/data/”
+        data_folder = os.path.abspath(os.path.join(base_folder, os.pardir))  
+        # Now build path to “src/data/csv/players/<player_id>-combined.csv”
+        combined_csv = os.path.join(data_folder, "data", "csv", "players", f"{player_id}-combined.csv")
+        
+        if not os.path.isfile(combined_csv):
+            raise FileNotFoundError(f"Cannot find combined CSV for {player_id} at {combined_csv}")
+        self.combined = pd.read_csv(combined_csv)
         
 
     def get_stats(self):
