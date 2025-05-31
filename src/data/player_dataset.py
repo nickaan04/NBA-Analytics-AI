@@ -30,7 +30,7 @@ class PlayerDataset:
         df = self.combined.iloc[-n:]
 
         # Extract numeric average from columns 3 onward (skip 'date')
-        stats_avg = df.drop(columns=["date"]).iloc[:, 2:].mean().to_frame().T
+        stats_avg = df.drop(columns=["date"]).iloc[:, 1:].mean().to_frame().T
 
         print(stats_avg)
 

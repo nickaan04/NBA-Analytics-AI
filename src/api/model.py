@@ -13,8 +13,8 @@ class PropStat(str, Enum):
     ast = "ast"
     stl = "stl"
     blk = "blk"
-    to = "to"
-    fg3 = "3pt"
+    tov = "tov"
+    fg3 = "fg3"
     fg = "fg"
     ft = "ft"
 
