@@ -81,9 +81,12 @@ class ParlayEvaluator:
         prediction_row = self.player_datasets[player_id].get_playoffs_avg(10)
 
         quantile_values = self.predict(player_id, parlayLeg.prop.lower(), prediction_row)
+        print(f"quantile values\n{quantile_values}")
 
         # Inflate the predicted quantiles to increase spread
         inflated = inflate_quantiles(quantile_values, inflation=1.3)
+        print(f"inflated quantiles\n{inflated}")
+
         result = self.quantile_converter.quantiles_to_hit_probability(inflated, float(parlayLeg.value))
 
         return ParlayLegProbability(
