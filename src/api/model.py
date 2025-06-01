@@ -2,8 +2,7 @@ from pydantic import BaseModel
 from enum import Enum
 from typing import List, Literal
 
-# players = ["Pascal Siakam", "Tyrese Haliburton", "Myles Turner", "Andrew Nembhard", "Aaron Nesmith", "Shai Gilgeous-Alexander", "Luguentz Dort", "Jalen Williams", "Isaiah Hartenstein", "Chet Holmgren"]
-players = ["Tyrese Haliburton"]
+players = ["Pascal Siakam", "Tyrese Haliburton", "Myles Turner", "Andrew Nembhard", "Aaron Nesmith", "Shai Gilgeous-Alexander", "Luguentz Dort", "Jalen Williams", "Isaiah Hartenstein", "Chet Holmgren"]
 
 Player = Enum('Player', {name.replace(' ', '_'): name for name in players}, type=str)
 
