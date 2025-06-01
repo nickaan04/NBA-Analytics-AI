@@ -3,8 +3,7 @@ from typing import List
 from download import get_player_ids_from_rosters, get_player_data
 from cleanup import combine_and_clean_player, merge_player_csvs, update_rebound_column_in_combined_csvs
 
-TEAMS = ["OKC"]
-# TEAMS = ["OKC", "IND"]
+TEAMS = ["OKC", "IND"]
 SEASONS = [2022, 2023, 2024, 2025]
 
 def main(teams: List[str], seasons: List[int]) -> None: #download player data, clean and combine csvs
@@ -12,20 +11,20 @@ def main(teams: List[str], seasons: List[int]) -> None: #download player data, c
     player_map = get_player_ids_from_rosters(teams)
     # print(f"Found {len(player_map)} players across teams: {teams}")
 
-    # #Download per-year logs for each player & season
-    # for player_name in player_map:
-    #     print(f"\nDownloading data for {player_name}")
-    #     for year in seasons:
-    #         get_player_data(player_name, year, player_map)
-    #         time.sleep(6)  #rate-limit
+    #Download per-year logs for each player & season
+    for player_name in player_map:
+        print(f"\nDownloading data for {player_name}")
+        for year in seasons:
+            get_player_data(player_name, year, player_map)
+            time.sleep(6)  #rate-limit
 
     #Combine and clean into comprehensive CSVs per player
     print("\nCombining and cleaning per-player CSVs...")
-    # for name, pid in player_map.items():
-        # print(f"Processing player: {name} ({pid})")
-        # combine_and_clean_player(pid)
-        # merge_player_csvs(pid)
-        # update_rebound_column_in_combined_csvs()
+    for name, pid in player_map.items():
+        print(f"Processing player: {name} ({pid})")
+        combine_and_clean_player(pid)
+        merge_player_csvs(pid)
+    update_rebound_column_in_combined_csvs()
 
 if __name__ == "__main__":
     main(TEAMS, SEASONS)

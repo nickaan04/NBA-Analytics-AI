@@ -63,10 +63,9 @@ class ParlayEvaluator:
         
         # Train model
         predictor.fit(
-
             train_data=noisy_data,
             presets='medium_quality',
-            time_limit=100,
+            time_limit=300,
             num_bag_folds=5,
             num_stack_levels=1,
             verbosity=2
