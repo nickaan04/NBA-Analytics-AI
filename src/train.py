@@ -3,6 +3,7 @@ from model.parlay_evaluator import ParlayEvaluator
 from data.player_dataset import PlayerDataset
 from api.model import PropStat
 from data.download import get_player_ids_from_rosters
+import os
 
 evaluator = ParlayEvaluator()
 

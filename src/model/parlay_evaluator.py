@@ -39,14 +39,18 @@ class ParlayEvaluator:
             label=label,
             problem_type='quantile', 
             quantile_levels=QUANTILE_LEVELS,
-            sample_weight="is_playoff"
+            sample_weight="is_playoff",
+            eval_metric="pinball_loss"
         )
         
         # Train model
         predictor.fit(
             train_data=historical_data,
-            presets='best_quality',
-            time_limit=300 # 5 min
+            presets='medium_quality',
+            time_limit=100,
+            num_bag_folds=5,
+            num_stack_levels=1,
+            verbosity=2
         )
 
     def predict(self, player_id: str, prop: PropStat, row: pd.DataFrame) -> List[float]:
