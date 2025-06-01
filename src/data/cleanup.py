@@ -2,8 +2,6 @@ import os
 import glob
 import pandas as pd
 
-TEAMS = ["OKC", "IND"]
-
 # Values that indicate the player did not play
 EXCLUDE_VALUES = {"Did Not Play", "Inactive", "Did Not Dress", "", None}
 REG_PATTERN = "{pid}-regular.csv"
@@ -11,7 +9,6 @@ PLAYOFF_PATTERN = "{pid}-playoffs.csv"
 
 # Columns to keep in the final, cleaned CSV
 KEEP_COLS = [
-    "player_game_num_career",
     "date",
     "pts",
     "blk",
