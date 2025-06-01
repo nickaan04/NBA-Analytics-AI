@@ -148,3 +148,35 @@ def update_rebound_column_in_combined_csvs(player_dir: str = "./src/data/csv/pla
                 print(f"No orb/drb columns in {os.path.basename(filepath)}, skipping.")
         except Exception as e:
             print(f"Failed to update {os.path.basename(filepath)}: {e}")
+
+def gradient_weighting_by_season(player_dir: str = "./src/data/csv/players"):
+    """
+    Add season-based weights to player data where more recent seasons have higher weights.
+    Weights start at 1.0 for the oldest season and increase by 0.2 for each newer season.
+    Seasons are identified by when the game number resets to 1.
+    
+    Args:
+        player_dir: Directory containing the combined player CSV files
+    """
+    pattern = os.path.join(player_dir, "*-combined.csv")
+    for filepath in glob.glob(pattern):
+        try:
+            df = pd.read_csv(filepath)
+            
+            # Convert date to datetime if not already
+            df['date'] = pd.to_datetime(df['date'])
+            
+            # Identify seasons by looking at when game number resets to 1
+            df['season'] = (df['player_game_num_career'].diff() < 0).cumsum()
+            
+            # Calculate weights - start at 1.0 and increase by 0.4 each season
+            df['weight'] = df['season'].apply(lambda x: 1.0 + (x * 0.4))
+            
+            # Save the updated dataframe
+            df.to_csv(filepath, index=False)
+            print(f"Added season weights to {os.path.basename(filepath)}")
+            
+        except Exception as e:
+            print(f"Failed to update {os.path.basename(filepath)}: {e}")
+
+gradient_weighting_by_season()
