@@ -10,7 +10,6 @@ dependencies = [
     "pydantic>=2.0,<3.0",
     "scikit-learn>=1.2",
     "autogluon.tabular[all]>=1.1.1",
-    "torch>=2.5.0,<2.6",
     "bs4>=0",
     "html5lib>=0"
 ]

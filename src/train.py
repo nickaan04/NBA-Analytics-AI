@@ -19,9 +19,9 @@ def train_player_props(player_id: str):
         evaluator.train_player_prop_model(player_id, prop, player_data.get_stats())
 
 def train_all():
-    player_ids = get_player_ids_from_rosters(TEAM)
+    player_map = get_player_ids_from_rosters(TEAM)
 
-    for player_id in player_ids:
-        train_player_props(player_id)
+    for name, pid in player_map.items():
+        train_player_props(pid)
 
 train_all()
