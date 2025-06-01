@@ -1,71 +1,72 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './ResultPage.css';
+// src/ResultPage.jsx
+
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "./ResultPage.css";
 
 /**
- * Given a probability between 0 and 1, return a color string that
- * goes from red (low) to green (high).
+ * Convert a probability (0 to 1) into a smooth HSL color from red (0°) to green (120°).
+ * For example: prob=0 → "hsl(0, 75%, 50%)" (bright red)
+ *              prob=0.5 → "hsl(60, 75%, 50%)" (yellowish)
+ *              prob=1 → "hsl(120, 75%, 50%)" (bright green)
  */
 function getProbabilityColor(prob) {
-  if (prob < 0.2) return '#e74c3c'; //red
-  if (prob < 0.4) return '#e67e22'; //orange
-  if (prob < 0.6) return '#f1c40f'; //yellow
-  if (prob < 0.8) return '#2ecc71'; //light green
-  return '#27ae60'; //dark green
-}
-
-/**
- * Convert a player name to a “key” for image lookup inside /public/images/.
- * Adjust as needed to match your actual filenames.
- */
-function getPlayerImageUrl(playerName) {
-  const key = playerName.toLowerCase().replace(/\s+/g, '');
-  return `/images/${key}.png`;
+  const hue = Math.round(prob * 120);          // 0 → 120
+  return `hsl(${hue}, 75%, 50%)`;
 }
 
 function ResultPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  //if state is missing or malformed, redirect back to home
+  // If state is missing or malformed, prompt to go back
   if (
     !state ||
     !state.parlayLegProbabilities ||
     !state.playerMap ||
-    !state.overallProbability
+    state.overallProbability == null
   ) {
     return (
       <div className="result-page-container">
-        <p>No results available. <button onClick={() => navigate('/')}>Go Back</button></p>
+        <p>
+          No results available.{" "}
+          <button className="new-parlay-button" onClick={() => navigate("/")}>
+            Go Back
+          </button>
+        </p>
       </div>
     );
   }
 
-  const {
-    overallProbability,
-    parlayLegProbabilities,
-    playerMap  //this is { playerName: playerId, … }
-  } = state;
+  const { overallProbability, parlayLegProbabilities, playerMap } = state;
+
+  // Compute overall color now via gradient
+  const overallColor = getProbabilityColor(overallProbability);
 
   return (
     <div className="result-page-container">
       {/* Title */}
       <h1 className="title">ParlAI</h1>
 
-      {/* Overall Probability */}
+      {/* Overall probability */}
       <div className="overall-prob-container">
-        <span className="overall-prob-value">
+        <span
+          className="overall-prob-value"
+          style={{ color: overallColor }}
+        >
           {(overallProbability * 100).toFixed(1)}%
         </span>
-        <span className="overall-prob-label">Overall Parlay Probability</span>
+        <span className="overall-prob-label">
+          Overall Parlay Probability
+        </span>
       </div>
 
-      {/* Individual Legs */}
+      {/* Individual leg cards */}
       <div className="legs-container">
         {parlayLegProbabilities.map((leg, idx) => {
           const prob = leg.probability;
           const bgColor = getProbabilityColor(prob);
-          //lookup the playerId so we point to /images/<playerId>.png
+
           const playerId = playerMap[leg.player];
           const playerImageUrl = playerId
             ? `/images/${playerId}.png`
@@ -73,24 +74,27 @@ function ResultPage() {
 
           return (
             <div key={idx} className="leg-card">
+              {/* Player + Prop Info */}
               <div className="player-info">
                 <img
-                  className="player-image"
+                  className="player-photo"
                   src={playerImageUrl}
                   alt={leg.player}
                   onError={(e) => {
-                    // Fallback if custom image not found:
                     e.target.onerror = null;
-                    e.target.src = '/images/placeholder.png';
+                    e.target.src = "/images/placeholder.png";
                   }}
                 />
                 <div className="player-details">
-                  <h3 className="player-name">{leg.player}</h3>
+                  <h2 className="player-name">{leg.player}</h2>
                   <span className="prop-detail">
-                    {leg.prop.toUpperCase()} {leg.overUnder === 'over' ? '>' : '<'} {leg.value}
+                    {leg.overUnder.toUpperCase()} {leg.value}{" "}
+                    {leg.prop.toUpperCase()}
                   </span>
                 </div>
               </div>
+
+              {/* Probability bar */}
               <div
                 className="leg-probability"
                 style={{ backgroundColor: bgColor }}
@@ -104,7 +108,7 @@ function ResultPage() {
 
       {/* New Parlay Button */}
       <div className="new-parlay-container">
-        <button className="new-parlay-button" onClick={() => navigate('/')}>
+        <button className="new-parlay-button" onClick={() => navigate("/")}>
           New Parlay
         </button>
       </div>
