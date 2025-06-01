@@ -39,7 +39,7 @@ class ParlayEvaluator:
             label=label,
             problem_type='quantile', 
             quantile_levels=QUANTILE_LEVELS,
-            sample_weight="is_playoff",
+            sample_weight="weight",
             eval_metric="pinball_loss"
         )
         
