@@ -14,10 +14,10 @@ source venv/bin/activate
 pip install .
 ```
 
-## Run the FastApi server
+## Run the backend
 
 ```sh
-fastapi dev src/api/server.py
+python3 src/main.py
 ```
 
 ## Run the frontend
