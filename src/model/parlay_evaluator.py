@@ -13,7 +13,7 @@ from api.model import ParlayLeg
 from api.model import ParlayLegProbability
 from api.model import PropStat
 
-QUANTILE_LEVELS = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]
+QUANTILE_LEVELS = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 0.99]
 
 def add_noise(df, std=0.8):
     ignore = {"player_game_num_career", "date", "is_playoff"}

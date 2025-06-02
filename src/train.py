@@ -6,7 +6,7 @@ from data.download import get_player_ids_from_rosters
 import os
 
 evaluator = ParlayEvaluator()
-TEAM = ["OKC"] #change this to OKC when you want to train OKC
+TEAM = ["IND", "OKC"]
 
 props = PropStat._member_names_ # get list of all prop values from our enum in api/model.py
 
