@@ -1,0 +1,146 @@
+.result-page-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+h1.title {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+  color: #420275;
+}
+
+.overall-prob-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.overall-prob-value {
+  display: block;
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.overall-prob-label {
+  display: block;
+  font-size: 1.3rem;
+  color: black;
+}
+
+/* Container for the individual leg cards */
+.legs-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Each leg card */
+.leg-card {
+  background-color: #1a1a1a; /* match homepage’s black box */
+  border-radius: 12px;
+  width: calc(100% - 1rem); /* two cards per row with 1rem gap */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  padding: 1.1rem;
+}
+
+.player-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 0;      /* square, no circle mask */
+  margin-right: 1rem;
+}
+
+.player-details {
+  flex: 1;
+}
+
+.player-name {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #f1f1f1;
+}
+
+.prop-detail {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.3rem;
+  color: #bbbbbb;
+}
+
+/* Probability badge at the bottom of each card */
+.leg-probability {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+  padding: .7rem 0;
+}
+
+/* New Parlay button at the bottom */
+.new-parlay-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.new-parlay-button {
+  background-color: #3498db; /* same green as homepage’s evaluate button */
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.new-parlay-button:hover {
+  background-color: #2980b9;
+}
+  
+@media (max-width: 768px) {
+  .leg-card {
+    width: 100%;
+  }
+  .overall-prob-value {
+    font-size: 3.5rem;
+  }
+  .player-photo {
+    width: 80px;
+    height: 80px;
+    margin-right: 0.75rem;
+  }
+  .player-name {
+    font-size: 1.1rem;
+  }
+  .prop-detail {
+    font-size: 0.9rem;
+  }
+  .leg-probability {
+    font-size: 1.25rem;
+    padding: 0.5rem 0;
+  }
+  .new-parlay-button {
+    font-size: 1.25rem;
+    padding: 0.75rem 1.5rem;
+  }
+}

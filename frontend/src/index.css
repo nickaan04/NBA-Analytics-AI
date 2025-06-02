@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  #root {
+    padding: 2rem;
+  }

@@ -2,8 +2,7 @@ from pydantic import BaseModel
 from enum import Enum
 from typing import List, Literal
 
-# TODO gather all player names from our team rosters, populate list
-players = ["Stephen Curry"]
+players = ["Pascal Siakam", "Tyrese Haliburton", "Myles Turner", "Andrew Nembhard", "Aaron Nesmith", "Shai Gilgeous-Alexander", "Luguentz Dort", "Jalen Williams", "Isaiah Hartenstein", "Chet Holmgren"]
 
 Player = Enum('Player', {name.replace(' ', '_'): name for name in players}, type=str)
 
@@ -13,14 +12,13 @@ class PropStat(str, Enum):
     ast = "ast"
     stl = "stl"
     blk = "blk"
-    to = "to"
-    fg3 = "3pt"
+    tov = "tov"
+    fg3 = "fg3"
     fg = "fg"
     ft = "ft"
 
 class ParlayLeg(BaseModel):
     player: Player
-    opponent: str
     prop: PropStat
     value: float
     overUnder: Literal["over", "under"]
