@@ -16,7 +16,7 @@ from api.model import PropStat
 QUANTILE_LEVELS = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 0.99]
 
 def add_noise(df, std=0.8):
-    ignore = {"player_game_num_career", "date", "is_playoff"}
+    ignore = {"date", "is_playoff"}
     noisy_df = df.copy()
 
     # ignore gamenum, date, weight
